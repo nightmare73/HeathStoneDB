@@ -17,8 +17,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        resValue "string", "BLIZZARD_API_ID", BLIZZARD_API_ID
-        resValue "string", "BLIZZARD_API_SECRET", BLIZZARD_API_SECRET
+        buildConfigField "String", "BLIZZARD_API_ID", BLIZZARD_API_ID
+        buildConfigField "String", "BLIZZARD_API_SECRET", BLIZZARD_API_SECRET
     }
 
     compileOptions {
