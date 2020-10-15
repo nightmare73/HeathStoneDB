@@ -34,6 +34,3 @@ data class BattleGroundCard(
     val minionTypeId: Int,
     val upgradeId: Int,
 ) : CommonCardKeywords
-
-// Raw에서 변환시 BattleGround 안에 있는 image를 넣어야한다.
-// 그렇지 않으면 이상한 사진이 들어감
