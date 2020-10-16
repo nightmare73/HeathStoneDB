@@ -16,6 +16,7 @@ import retrofit2.http.Part
  * Created By Malibin
  * on 10월 16, 2020
  */
+
 interface BlizzardOAuthService {
     @Multipart
     @POST("oauth/token")
