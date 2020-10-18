@@ -1,4 +1,7 @@
-package com.malibin.hearthstone.db.data
+package com.malibin.hearthstone.db.data.reponse
+
+import com.malibin.hearthstone.db.data.entity.BattleGroundCard
+import com.malibin.hearthstone.db.data.entity.Card
 
 /**
  * Created By Malibin

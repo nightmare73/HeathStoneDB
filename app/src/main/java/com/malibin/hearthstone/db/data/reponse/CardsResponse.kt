@@ -1,7 +1,5 @@
 package com.malibin.hearthstone.db.data.reponse
 
-import com.malibin.hearthstone.db.data.RawCard
-
 /**
  * Created By Malibin
  * on 10월 16, 2020

@@ -1,5 +1,7 @@
 package com.malibin.hearthstone.db.data.reponse.metadata
 
+import com.malibin.hearthstone.db.data.entity.metadata.*
+
 /**
  * Created By Malibin
  * on 10월 16, 2020
@@ -7,12 +9,12 @@ package com.malibin.hearthstone.db.data.reponse.metadata
 
 data class MetaDataResponse(
     val sets: List<CardSetResponse>,
-    val setGroups: List<CardSetGroupResponse>,
+    val setGroups: List<CardSetGroup>,
     val arenaIds: List<Int>,
-    val types: List<CardTypeResponse>,
+    val types: List<CardType>,
     val rarities: List<CardRarityResponse>,
-    val classes: List<CardClassResponse>,
-    val minionTypes: List<MinionTypeResponse>,
-    val keywords: List<CardKeywordResponse>,
-    val cardBackCategories: List<CardBackCategoryResponse>,
+    val classes: List<CardClass>,
+    val minionTypes: List<MinionType>,
+    val keywords: List<CardKeyword>,
+    val cardBackCategories: List<CardBackCategory>,
 )

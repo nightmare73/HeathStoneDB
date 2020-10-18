@@ -1,6 +1,6 @@
 package com.malibin.hearthstone.db.data.service
 
-import com.malibin.hearthstone.db.data.RawCard
+import com.malibin.hearthstone.db.data.reponse.RawCard
 import com.malibin.hearthstone.db.data.reponse.CardsResponse
 import com.malibin.hearthstone.db.data.reponse.metadata.MetaDataResponse
 import retrofit2.http.GET

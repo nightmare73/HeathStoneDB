@@ -1,4 +1,4 @@
-package com.malibin.hearthstone.db.data
+package com.malibin.hearthstone.db.data.entity
 
 /**
  * Created By Malibin
