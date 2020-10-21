@@ -28,7 +28,7 @@ interface BlizzardOAuthService {
     private fun getEncodedCredential(): String {
         val authCredentials = "${BuildConfig.BLIZZARD_API_ID}:${BuildConfig.BLIZZARD_API_SECRET}"
         val encodedCredentials =
-            Base64.encodeToString(authCredentials.toByteArray(), Base64.DEFAULT)
+            Base64.encodeToString(authCredentials.toByteArray(), Base64.NO_WRAP)
         return "Basic $encodedCredentials"
     }
 

@@ -33,6 +33,7 @@ interface BlizzardService {
 
     @GET("/hearthstone/metadata")
     suspend fun getMetaData(
+        @Query("access_token") accessToken: String,
         @Query("region") region: String = "kr",
         @Query("locale") locale: String = "ko_KR",
     ): MetaDataResponse
