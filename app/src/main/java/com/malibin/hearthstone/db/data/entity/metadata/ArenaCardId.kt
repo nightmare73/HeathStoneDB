@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
  */
 
 @Entity
-data class ArenaCard(
+data class ArenaCardId(
     @PrimaryKey
     val id: Int,
 )

@@ -18,7 +18,7 @@ import com.malibin.hearthstone.db.data.entity.metadata.*
     entities = [
         Card::class,
         BattleGroundCard::class,
-        ArenaCard::class,
+        ArenaCardId::class,
         CardSet::class,
         CardSetGroup::class,
         CardClass::class,

@@ -2,6 +2,7 @@ package com.malibin.hearthstone.db.data.dao
 
 import androidx.room.*
 import com.malibin.hearthstone.db.data.entity.metadata.*
+import com.malibin.hearthstone.db.data.reponse.metadata.MetaDataResponse
 
 /**
  * Created By Malibin
@@ -30,12 +31,12 @@ abstract class MetaDataDao {
     abstract suspend fun deleteCardSetGroups()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertArenaCards(arenaCards: List<ArenaCard>)
+    abstract suspend fun insertArenaCardIds(arenaCardIds: List<ArenaCardId>)
 
-    @Query("SELECT * FROM arenacard")
-    abstract suspend fun getCardArenaCardIds(): List<ArenaCard>
+    @Query("SELECT * FROM arenacardid")
+    abstract suspend fun getCardArenaCardIds(): List<ArenaCardId>
 
-    @Query("DELETE FROM arenacard")
+    @Query("DELETE FROM arenacardid")
     abstract suspend fun deleteArenaCardIds()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -91,6 +92,19 @@ abstract class MetaDataDao {
 
     @Query("DELETE FROM cardbackcategory")
     abstract suspend fun deleteCardBackCategories()
+
+    @Transaction
+    suspend fun insertAllMetaData(metaDataResponse: MetaDataResponse) {
+        insertCardSets(metaDataResponse.getCardSets())
+        insertCardSetGroups(metaDataResponse.getCardSetGroups())
+        insertArenaCardIds(metaDataResponse.getArenaCardIds())
+        insertCardTypes(metaDataResponse.getCardTypes())
+        insertCardRarities(metaDataResponse.getCardRarities())
+        insertCardClasses(metaDataResponse.getCardClasses())
+        insertMinionTypes(metaDataResponse.getMinionTypes())
+        insertCardKeywords(metaDataResponse.getCardKeywords())
+        insertCardBackCategories(metaDataResponse.getCardBackCategories())
+    }
 
     @Transaction
     suspend fun deleteAllMetaData() {

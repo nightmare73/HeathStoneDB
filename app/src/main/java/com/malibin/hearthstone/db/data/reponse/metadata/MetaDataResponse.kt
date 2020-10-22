@@ -8,13 +8,31 @@ import com.malibin.hearthstone.db.data.entity.metadata.*
  */
 
 data class MetaDataResponse(
-    val sets: List<CardSetResponse>,
-    val setGroups: List<CardSetGroup>,
-    val arenaIds: List<Int>,
-    val types: List<CardType>,
-    val rarities: List<CardRarityResponse>,
-    val classes: List<CardClass>,
-    val minionTypes: List<MinionType>,
-    val keywords: List<CardKeyword>,
-    val cardBackCategories: List<CardBackCategory>,
-)
+    private val sets: List<CardSetResponse>,
+    private val setGroups: List<CardSetGroup>,
+    private val arenaIds: List<Int>,
+    private val types: List<CardType>,
+    private val rarities: List<CardRarityResponse>,
+    private val classes: List<CardClass>,
+    private val minionTypes: List<MinionType>,
+    private val keywords: List<CardKeyword>,
+    private val cardBackCategories: List<CardBackCategory>,
+) {
+    fun getCardSets(): List<CardSet> = sets.map { it.toCardSet() }
+
+    fun getCardSetGroups(): List<CardSetGroup> = setGroups
+
+    fun getArenaCardIds(): List<ArenaCardId> = arenaIds.map { ArenaCardId(it) }
+
+    fun getCardTypes(): List<CardType> = types
+
+    fun getCardRarities(): List<CardRarity> = rarities.map { it.toCardRarity() }
+
+    fun getCardClasses(): List<CardClass> = classes
+
+    fun getMinionTypes(): List<MinionType> = minionTypes
+
+    fun getCardKeywords(): List<CardKeyword> = keywords
+
+    fun getCardBackCategories(): List<CardBackCategory> = cardBackCategories
+}
