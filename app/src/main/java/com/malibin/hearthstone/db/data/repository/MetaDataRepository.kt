@@ -3,14 +3,14 @@ package com.malibin.hearthstone.db.data.repository
 import com.malibin.hearthstone.db.data.dao.MetaDataDao
 import com.malibin.hearthstone.db.data.entity.metadata.*
 import com.malibin.hearthstone.db.data.reponse.metadata.MetaDataResponse
-import com.malibin.hearthstone.db.data.service.BlizzardService
+import javax.inject.Inject
 
 /**
  * Created By Malibin
  * on 10월 23, 2020
  */
 
-class MetaDataRepository(
+class MetaDataRepository @Inject constructor(
     private val metaDataDao: MetaDataDao,
 ) {
     private val cachedCardSets = mutableListOf<CardSet>()

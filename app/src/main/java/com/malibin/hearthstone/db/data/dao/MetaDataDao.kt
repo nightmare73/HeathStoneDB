@@ -94,7 +94,7 @@ abstract class MetaDataDao {
     abstract suspend fun deleteCardBackCategories()
 
     @Transaction
-    suspend fun insertAllMetaData(metaDataResponse: MetaDataResponse) {
+    open suspend fun insertAllMetaData(metaDataResponse: MetaDataResponse) {
         insertCardSets(metaDataResponse.getCardSets())
         insertCardSetGroups(metaDataResponse.getCardSetGroups())
         insertArenaCardIds(metaDataResponse.getArenaCardIds())
@@ -107,7 +107,7 @@ abstract class MetaDataDao {
     }
 
     @Transaction
-    suspend fun deleteAllMetaData() {
+    open suspend fun deleteAllMetaData() {
         deleteCardSets()
         deleteCardSetGroups()
         deleteArenaCardIds()

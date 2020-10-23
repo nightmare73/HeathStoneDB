@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.malibin.hearthstone.db.data.dao.CardsDao
+import com.malibin.hearthstone.db.data.dao.MetaDataDao
 import com.malibin.hearthstone.db.data.entity.BattleGroundCard
 import com.malibin.hearthstone.db.data.entity.Card
 import com.malibin.hearthstone.db.data.entity.metadata.*
@@ -30,6 +31,9 @@ import com.malibin.hearthstone.db.data.entity.metadata.*
     ],
     version = 1
 )
-abstract class AppDataBase : RoomDatabase() {
+abstract class HearthStoneDataBase : RoomDatabase() {
+
     abstract fun cardsDao(): CardsDao
+
+    abstract fun metaDataDao(): MetaDataDao
 }
