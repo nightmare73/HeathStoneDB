@@ -16,7 +16,7 @@ interface BlizzardService {
     @GET("/hearthstone/cards")
     suspend fun getCards(
         @Query("access_token") accessToken: String,
-        @Query("page") page: Int,
+        @Query("page") page: Int = 1,
         @Query("gameMode") gamaMode: String = "constructed",
         @Query("region") region: String = "kr",
         @Query("locale") locale: String = "ko_KR",
