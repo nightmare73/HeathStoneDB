@@ -1,5 +1,6 @@
 package com.malibin.hearthstone.db.presentation.initial
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,14 +10,13 @@ import com.malibin.hearthstone.db.data.repository.MetaDataRepository
 import com.malibin.hearthstone.db.data.service.BlizzardOAuthService
 import com.malibin.hearthstone.db.data.service.BlizzardService
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * Created By Malibin
  * on 10월 26, 2020
  */
 
-class InitialDataViewModel @Inject constructor(
+class InitialDataViewModel @ViewModelInject constructor(
     private val oAuthService: BlizzardOAuthService,
     private val blizzardService: BlizzardService,
     private val metaDataRepository: MetaDataRepository,

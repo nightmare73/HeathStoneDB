@@ -1,16 +1,15 @@
 package com.malibin.hearthstone.db.presentation.initial
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.malibin.hearthstone.db.databinding.ActivityInitialDataBinding
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class InitialDataActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var initialDataViewModel: InitialDataViewModel
+    private val initialDataViewModel: InitialDataViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

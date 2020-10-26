@@ -5,8 +5,6 @@ import com.malibin.hearthstone.db.BuildConfig
 import com.malibin.hearthstone.db.data.reponse.OAuthResponse
 import okhttp3.MediaType
 import okhttp3.RequestBody
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
