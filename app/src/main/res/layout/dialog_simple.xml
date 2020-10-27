@@ -7,7 +7,7 @@
 
         <variable
             name="clickListener"
-            type="com.malibin.hearthstone.db.presentation.dialog.WarningDialogClickListener" />
+            type="com.malibin.hearthstone.db.presentation.dialog.SimpleDialogClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

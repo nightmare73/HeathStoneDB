@@ -7,7 +7,7 @@ import android.view.View
  * on 10월 28, 2020
  */
 
-interface WarningDialogClickListener {
+interface SimpleDialogClickListener {
 
     fun onCancelClick(view: View)
 
