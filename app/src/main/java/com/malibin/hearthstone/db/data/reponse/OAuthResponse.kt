@@ -8,5 +8,7 @@ data class OAuthResponse(
     @SerializedName("token_type")
     val tokenType: String,
     @SerializedName("expires_in")
-    val expireTime: Long,
-)
+    val expireIn: Long,
+) {
+    fun getExpireTime(): Long = System.currentTimeMillis() + expireIn * 1_000
+}
