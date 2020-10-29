@@ -16,14 +16,10 @@ import kotlinx.coroutines.launch
  * on 10월 26, 2020
  */
 
-// TODO: BlizzardService를 Repository안에 집어넣는게 더 뽐새가 좋아보인다.
-// 리모트/로컬 데이터소스 레이어 추가는 안하더라도 Repository 레이어 내에 넣는게 더 나을듯.
-
 class InitialDataViewModel @ViewModelInject constructor(
-    private val blizzardAuthRepository: BlizzardAuthRepository,
-    private val blizzardService: BlizzardService,
-    private val metaDataRepository: MetaDataRepository,
     private val cardsRepository: CardsRepository,
+    private val metaDataRepository: MetaDataRepository,
+    private val blizzardAuthRepository: BlizzardAuthRepository,
 ) : ViewModel() {
 
     private val _isMetaDataLoadFinished = MutableLiveData(false)
@@ -35,26 +31,20 @@ class InitialDataViewModel @ViewModelInject constructor(
         get() = _isCardsLoadFinished
 
     fun load() = viewModelScope.launch {
-        val blizzardToken = blizzardAuthRepository.getAccessToken()
-        loadMetaData(blizzardToken)
-        loadCards(blizzardToken)
+        val blizzardAccessToken = blizzardAuthRepository.getAccessToken()
+        loadMetaData(blizzardAccessToken)
+        loadCards(blizzardAccessToken)
     }
 
-    private suspend fun loadMetaData(token: String) {
+    private suspend fun loadMetaData(accessToken: String) {
         _isMetaDataLoadFinished.value = false
-        metaDataRepository.loadAllMetaDataFromRemote(token)
+        metaDataRepository.loadAllMetaDataFromRemote(accessToken)
         _isMetaDataLoadFinished.value = true
     }
 
-    private suspend fun loadCards(token: String) {
-        val cardsResponse = blizzardService.getCards(token)
-        cardsRepository.saveCards(cardsResponse.toCards())
-        (2..cardsResponse.pageCount).forEach { loadCardsPageOf(it, token) }
+    private suspend fun loadCards(accessToken: String) {
+        _isCardsLoadFinished.value = false
+        cardsRepository.loadAllCardsFromRemote(accessToken)
         _isCardsLoadFinished.value = true
-    }
-
-    private suspend fun loadCardsPageOf(page: Int, token: String) {
-        val cardsResponse = blizzardService.getCards(accessToken = token, page = page)
-        cardsRepository.saveCards(cardsResponse.toCards())
     }
 }

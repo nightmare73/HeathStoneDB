@@ -2,6 +2,7 @@ package com.malibin.hearthstone.db.data.repository
 
 import com.malibin.hearthstone.db.data.dao.CardsDao
 import com.malibin.hearthstone.db.data.entity.Card
+import com.malibin.hearthstone.db.data.service.BlizzardService
 import javax.inject.Inject
 
 /**
@@ -9,18 +10,35 @@ import javax.inject.Inject
  * on 10월 26, 2020
  */
 
+// TODO: 나중에 카드 리스트 페이징도 해보자
 class CardsRepository @Inject constructor(
     private val cardsDao: CardsDao,
+    private val blizzardService: BlizzardService,
 ) {
-    suspend fun saveCards(cards: List<Card>) {
-        cardsDao.insertCards(cards)
+    suspend fun getAllCards(accessToken: String): List<Card> {
+        val cards = cardsDao.getAllCards()
+        if (cards.isNotEmpty()) return cards
+        loadAllCardsFromRemote(accessToken)
+        return cardsDao.getAllCards()
+    }
+
+    suspend fun loadAllCardsFromRemote(accessToken: String) {
+        deleteAllCards()
+        val firstCardsResponse = blizzardService.getCards(accessToken)
+        saveCards(firstCardsResponse.toCards())
+        (2..firstCardsResponse.pageCount).forEach { loadCardsPageOf(it, accessToken) }
     }
 
     suspend fun deleteAllCards() {
         cardsDao.deleteAllCards()
     }
 
-    suspend fun getAllCards(): List<Card> {
-        return cardsDao.getAllCards()
+    private suspend fun saveCards(cards: List<Card>) {
+        cardsDao.insertCards(cards)
+    }
+
+    private suspend fun loadCardsPageOf(page: Int, token: String) {
+        val cardsResponse = blizzardService.getCards(accessToken = token, page = page)
+        saveCards(cardsResponse.toCards())
     }
 }
