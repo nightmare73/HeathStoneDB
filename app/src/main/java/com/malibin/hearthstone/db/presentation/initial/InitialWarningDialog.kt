@@ -1,8 +1,8 @@
 package com.malibin.hearthstone.db.presentation.initial
 
 import android.content.Context
-import com.malibin.hearthstone.db.presentation.dialog.SimpleDialog
 import com.malibin.hearthstone.db.R
+import com.malibin.hearthstone.db.presentation.dialog.SimpleDialog
 
 /**
  * Created By Malibin

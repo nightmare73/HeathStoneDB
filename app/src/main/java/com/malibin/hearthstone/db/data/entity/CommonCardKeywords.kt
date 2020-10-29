@@ -14,7 +14,6 @@ interface CommonCardKeywords {
     val cardTypeId: Int
     val cardSetId: Int
     val rarityId: Int
-    val artistName: String
     val manaCost: Int
     val name: String
     val text: String

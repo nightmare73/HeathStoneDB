@@ -6,6 +6,7 @@ import androidx.datastore.preferences.edit
 import androidx.datastore.preferences.preferencesKey
 import com.malibin.hearthstone.db.data.reponse.OAuthResponse
 import com.malibin.hearthstone.db.data.service.BlizzardOAuthService
+import com.malibin.hearthstone.db.presentation.utils.printLog
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -23,10 +24,10 @@ class BlizzardAuthRepository @Inject constructor(
     suspend fun getAccessToken(): String {
         val localToken = blizzardTokenStore.data.map { it[KEY_BLIZZARD_ACCESS_TOKEN] }.first()
         return if (localToken == null) {
-            getRemoteAccessToken()
+            getRemoteAccessToken().also { printLog("localToken not exist") }
         } else {
-            if (isTokenExpired()) getRemoteAccessToken()
-            else localToken
+            if (isTokenExpired()) getRemoteAccessToken().also { printLog("localToken expired") }
+            else localToken.also { printLog("localToken loaded") }
         }
     }
 

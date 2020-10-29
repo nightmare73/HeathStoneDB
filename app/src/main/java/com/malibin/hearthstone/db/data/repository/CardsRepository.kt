@@ -3,6 +3,7 @@ package com.malibin.hearthstone.db.data.repository
 import com.malibin.hearthstone.db.data.dao.CardsDao
 import com.malibin.hearthstone.db.data.entity.Card
 import com.malibin.hearthstone.db.data.service.BlizzardService
+import com.malibin.hearthstone.db.presentation.utils.printLog
 import javax.inject.Inject
 
 /**
@@ -40,5 +41,6 @@ class CardsRepository @Inject constructor(
     private suspend fun loadCardsPageOf(page: Int, token: String) {
         val cardsResponse = blizzardService.getCards(accessToken = token, page = page)
         saveCards(cardsResponse.toCards())
+        printLog("card page of $page loaded")
     }
 }

@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.malibin.hearthstone.db.data.repository.BlizzardAuthRepository
 import com.malibin.hearthstone.db.data.repository.CardsRepository
 import com.malibin.hearthstone.db.data.repository.MetaDataRepository
-import com.malibin.hearthstone.db.data.service.BlizzardService
 import kotlinx.coroutines.launch
 
 /**
