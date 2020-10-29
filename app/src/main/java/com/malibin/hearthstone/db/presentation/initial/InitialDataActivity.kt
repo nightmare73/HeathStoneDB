@@ -17,7 +17,12 @@ class InitialDataActivity : AppCompatActivity() {
         val binding = ActivityInitialDataBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // TODO : 이전에 와이파이인지 물어보고 데이터 다운받는 다이얼로그 만들기.
-        initialDataViewModel.load()
+        deployWarningDialog()
+    }
+
+    private fun deployWarningDialog() {
+        InitialWarningDialog(this).apply {
+            setOnOkClickListener { initialDataViewModel.load() }
+        }.show()
     }
 }
