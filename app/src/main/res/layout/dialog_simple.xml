@@ -31,7 +31,7 @@
             android:lineSpacingExtra="1dp"
             android:minLines="2"
             android:textColor="@android:color/black"
-            android:textSize="14dp"
+            android:textSize="15dp"
             app:layout_constraintBottom_toTopOf="@+id/btn_cancel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

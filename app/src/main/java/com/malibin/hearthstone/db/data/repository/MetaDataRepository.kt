@@ -27,7 +27,7 @@ class MetaDataRepository @Inject constructor(
 
     suspend fun loadAllMetaDataFromRemote(accessToken: String) {
         val metaDataResponse = blizzardService.getMetaData(accessToken)
-        metaDataDao.deleteAllMetaData()
+        deleteAllMetaData()
         metaDataDao.insertAllMetaData(metaDataResponse)
         cacheAllMetaData(metaDataResponse)
     }
@@ -141,5 +141,9 @@ class MetaDataRepository @Inject constructor(
             loadAllMetaDataFromRemote(accessToken)
         }
         return cachedCardBackCategories
+    }
+
+    suspend fun deleteAllMetaData() {
+        metaDataDao.deleteAllMetaData()
     }
 }

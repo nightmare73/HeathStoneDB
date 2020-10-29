@@ -47,4 +47,9 @@ class InitialDataViewModel @ViewModelInject constructor(
         cardsRepository.loadAllCardsFromRemote(accessToken)
         _isCardsLoadFinished.value = true
     }
+
+    suspend fun deleteAllTempFunction() {
+        cardsRepository.deleteAllCards()
+        metaDataRepository.deleteAllMetaData()
+    }
 }
