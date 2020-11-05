@@ -35,4 +35,6 @@ data class Card(
     val health: Int?,
     val parentId: Int?,
     val childIds: List<Int>,
+    val collectedCount: Int,
+    val isFavorite: Boolean,
 ) : CommonCardKeywords

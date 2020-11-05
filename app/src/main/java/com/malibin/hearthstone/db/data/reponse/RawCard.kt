@@ -60,6 +60,8 @@ data class RawCard(
         health = health,
         parentId = parentId,
         childIds = childIds ?: emptyList(),
+        collectedCount = 0,
+        isFavorite = false,
     )
 
     fun toBattleGroundCard() = BattleGroundCard(
