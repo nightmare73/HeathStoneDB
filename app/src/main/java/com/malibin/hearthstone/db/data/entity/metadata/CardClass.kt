@@ -11,8 +11,8 @@ import androidx.room.PrimaryKey
 @Entity
 data class CardClass(
     @PrimaryKey
-    val slug: String,
-    val id: Int,
-    val name: String,
+    override val id: Int,
+    override val slug: String,
+    override val name: String,
     val cardId: Int? = null,
-)
+) : MetaData

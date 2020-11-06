@@ -11,11 +11,11 @@ import androidx.room.PrimaryKey
 @Entity
 data class CardRarity(
     @PrimaryKey
-    val id: Int,
-    val slug: String,
-    val name: String,
+    override val id: Int,
+    override val slug: String,
+    override val name: String,
     val craftingCost: Int?,
     val craftingGoldCost: Int?,
     val dustValue: Int?,
     val dustGoldValue: Int?,
-)
+) : MetaData

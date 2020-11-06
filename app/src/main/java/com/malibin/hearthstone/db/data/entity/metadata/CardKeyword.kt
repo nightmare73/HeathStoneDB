@@ -12,10 +12,10 @@ import com.google.gson.annotations.SerializedName
 @Entity
 data class CardKeyword(
     @PrimaryKey
-    val id: Int,
-    val slug: String,
-    val name: String,
+    override val id: Int,
+    override val slug: String,
+    override val name: String,
     val text: String,
     @SerializedName("refText")
     val detailText: String,
-)
+) : MetaData

@@ -12,10 +12,10 @@ import java.util.*
 @Entity
 data class CardSet(
     @PrimaryKey
-    val id: Int,
-    val name: String,
-    val slug: String,
+    override val id: Int,
+    override val slug: String,
+    override val name: String,
     val releaseDate: Date?,
     val type: String,
     val collectibleCount: Int,
-)
+) : MetaData

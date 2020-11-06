@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class MinionType(
     @PrimaryKey
-    val id: Int,
-    val slug: String,
-    val name: String,
-)
+    override val id: Int,
+    override val slug: String,
+    override val name: String,
+) : MetaData
