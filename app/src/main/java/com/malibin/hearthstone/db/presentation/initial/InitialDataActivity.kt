@@ -1,15 +1,13 @@
 package com.malibin.hearthstone.db.presentation.initial
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.malibin.hearthstone.db.R
 import com.malibin.hearthstone.db.databinding.ActivityInitialDataBinding
+import com.malibin.hearthstone.db.presentation.card.CardsActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class InitialDataActivity : AppCompatActivity() {
@@ -26,6 +24,10 @@ class InitialDataActivity : AppCompatActivity() {
 
         subscribeLoadingState(binding)
         deployWarningDialog()
+
+        binding.button.setOnClickListener {
+            startActivity(Intent(this, CardsActivity::class.java))
+        }
     }
 
     private fun deployWarningDialog() {
@@ -43,11 +45,11 @@ class InitialDataActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        CoroutineScope(Dispatchers.IO).launch {
-            initialDataViewModel.deleteAllTempFunction()
-            Log.d("Malibin Debug", "All Data Deleted")
-        }
-    }
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        CoroutineScope(Dispatchers.IO).launch {
+//            initialDataViewModel.deleteAllTempFunction()
+//            Log.d("Malibin Debug", "All Data Deleted")
+//        }
+//    }
 }
