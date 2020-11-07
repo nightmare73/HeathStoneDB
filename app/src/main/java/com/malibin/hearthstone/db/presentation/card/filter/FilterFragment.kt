@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.malibin.hearthstone.db.data.entity.metadata.MetaData
 import com.malibin.hearthstone.db.data.repository.MetaDataRepository
 import com.malibin.hearthstone.db.databinding.FragmentFilterBinding
+import com.malibin.hearthstone.db.presentation.utils.printLog
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -25,7 +26,7 @@ import javax.inject.Inject
 class FilterFragment : Fragment() {
 
     @Inject
-    lateinit var metadataRepository: MetaDataRepository
+    lateinit var filterViewModel: FilterViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,9 +46,14 @@ class FilterFragment : Fragment() {
         filterAdapter.setOnFilterTypeClickListener { onFilterTypeClick(it) }
         binding.rvFilterItems.addItemDecoration(dividerDecoration)
         binding.rvFilterItems.adapter = filterAdapter
+
+        filterViewModel.filterDetails.observe(viewLifecycleOwner) {
+            printLog(it.toString())
+        }
     }
 
     private fun onFilterTypeClick(filterType: MetaData.FilterType) {
         Toast.makeText(requireContext(), "$filterType", Toast.LENGTH_SHORT).show()
+        filterViewModel.loadFilterDetailsOf(filterType)
     }
 }
