@@ -6,4 +6,5 @@
 
     <color name="transparent">#00000000</color>
     <color name="grayF1">#F1F1F1</color>
+    <color name="grayEE">#EEEEEE</color>
 </resources>

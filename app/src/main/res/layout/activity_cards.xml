@@ -22,7 +22,7 @@
         <FrameLayout
             android:id="@+id/zone_filter"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="160dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
