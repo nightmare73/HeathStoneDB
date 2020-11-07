@@ -14,4 +14,5 @@ data class MinionType(
     override val id: Int,
     override val slug: String,
     override val name: String,
-) : MetaData
+    override val filterType: MetaData.FilterType = MetaData.FilterType.MINION_TYPE,
+) : MetaData, Filterable

@@ -15,7 +15,8 @@ data class CardSet(
     override val id: Int,
     override val slug: String,
     override val name: String,
+    override val filterType: MetaData.FilterType = MetaData.FilterType.CARD_SET,
     val releaseDate: Date?,
     val type: String,
     val collectibleCount: Int,
-) : MetaData
+) : MetaData, Filterable

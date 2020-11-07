@@ -14,8 +14,9 @@ data class CardRarity(
     override val id: Int,
     override val slug: String,
     override val name: String,
+    override val filterType: MetaData.FilterType = MetaData.FilterType.RARITY,
     val craftingCost: Int?,
     val craftingGoldCost: Int?,
     val dustValue: Int?,
     val dustGoldValue: Int?,
-) : MetaData
+) : MetaData, Filterable

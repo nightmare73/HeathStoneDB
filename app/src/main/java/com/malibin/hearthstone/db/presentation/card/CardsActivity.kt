@@ -3,6 +3,7 @@ package com.malibin.hearthstone.db.presentation.card
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.malibin.hearthstone.db.R
+import com.malibin.hearthstone.db.presentation.card.filter.FilterFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -13,6 +14,10 @@ class CardsActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, CardsFragment())
+            .commit()
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.zone_filter, FilterFragment())
             .commit()
     }
 }

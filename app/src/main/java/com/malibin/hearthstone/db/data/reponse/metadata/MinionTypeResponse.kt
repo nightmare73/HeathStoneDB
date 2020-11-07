@@ -1,5 +1,6 @@
 package com.malibin.hearthstone.db.data.reponse.metadata
 
+import com.malibin.hearthstone.db.data.entity.metadata.MetaData
 import com.malibin.hearthstone.db.data.entity.metadata.MinionType
 
 /**
@@ -16,5 +17,6 @@ data class MinionTypeResponse(
         id = id,
         slug = slug,
         name = name,
+        filterType = MetaData.FilterType.MINION_TYPE,
     )
 }

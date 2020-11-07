@@ -11,7 +11,9 @@ import androidx.room.PrimaryKey
 @Entity
 data class CardType(
     @PrimaryKey
-    val id: Int,
-    val slug: String,
-    val name: String,
-)
+    override val id: Int,
+    override val slug: String,
+    override val name: String,
+    override val filterType: MetaData.FilterType = MetaData.FilterType.CARD_TYPE,
+) : MetaData, Filterable
+

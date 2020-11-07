@@ -1,6 +1,7 @@
 package com.malibin.hearthstone.db.data.db
 
 import androidx.room.TypeConverter
+import com.malibin.hearthstone.db.data.entity.metadata.MetaData
 import java.util.*
 
 /**
@@ -33,7 +34,16 @@ class TypeConverter {
     @TypeConverter
     fun fromListString(stringList: List<String>): String = stringList.joinToString(DELIMITER)
 
+    @TypeConverter
+    fun toFilterType(rawString: String): MetaData.FilterType {
+        return MetaData.FilterType.valueOf(rawString)
+    }
+
+    @TypeConverter
+    fun fromFilterType(filterType: MetaData.FilterType): String = filterType.name
+
     companion object {
         private const val DELIMITER = "\t"
     }
 }
+

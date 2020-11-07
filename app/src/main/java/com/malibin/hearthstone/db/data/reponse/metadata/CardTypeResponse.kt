@@ -1,6 +1,7 @@
 package com.malibin.hearthstone.db.data.reponse.metadata
 
 import com.malibin.hearthstone.db.data.entity.metadata.CardType
+import com.malibin.hearthstone.db.data.entity.metadata.MetaData
 
 /**
  * Created By Malibin
@@ -16,5 +17,6 @@ data class CardTypeResponse(
         id = id,
         slug = slug,
         name = name,
+        filterType = MetaData.FilterType.CARD_TYPE,
     )
 }

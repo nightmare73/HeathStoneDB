@@ -1,6 +1,7 @@
 package com.malibin.hearthstone.db.data.reponse.metadata
 
 import com.malibin.hearthstone.db.data.entity.metadata.CardKeyword
+import com.malibin.hearthstone.db.data.entity.metadata.MetaData
 
 /**
  * Created By Malibin
@@ -20,5 +21,6 @@ data class CardKeywordResponse(
         name = name,
         text = text,
         detailText = refText,
+        filterType = MetaData.FilterType.KEYWORD,
     )
 }

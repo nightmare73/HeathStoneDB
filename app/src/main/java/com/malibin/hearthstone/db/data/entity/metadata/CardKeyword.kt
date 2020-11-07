@@ -15,7 +15,8 @@ data class CardKeyword(
     override val id: Int,
     override val slug: String,
     override val name: String,
+    override val filterType: MetaData.FilterType = MetaData.FilterType.KEYWORD,
     val text: String,
     @SerializedName("refText")
     val detailText: String,
-) : MetaData
+) : MetaData, Filterable
