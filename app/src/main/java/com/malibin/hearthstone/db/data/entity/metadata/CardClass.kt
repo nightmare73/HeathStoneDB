@@ -14,6 +14,18 @@ data class CardClass(
     override val id: Int,
     override val slug: String,
     override val name: String,
-    override val filterType: MetaData.FilterType = MetaData.FilterType.CLASS,
     val cardId: Int? = null,
-) : MetaData, Filterable
+) : MetaData
+
+//    {
+//      "slug": "demonhunter",
+//      "id": 14,
+//      "name": "악마사냥꾼",
+//      "cardId": 56550
+//    },
+//    {
+//      "slug": "druid",
+//      "id": 2,
+//      "name": "드루이드",
+//      "cardId": 274
+//    },

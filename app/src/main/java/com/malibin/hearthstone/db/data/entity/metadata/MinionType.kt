@@ -14,5 +14,20 @@ data class MinionType(
     override val id: Int,
     override val slug: String,
     override val name: String,
-    override val filterType: MetaData.FilterType = MetaData.FilterType.MINION_TYPE,
-) : MetaData, Filterable
+) : MetaData
+
+//    {
+//      "slug": "murloc",
+//      "id": 14,
+//      "name": "멀록"
+//    },
+//    {
+//      "slug": "demon",
+//      "id": 15,
+//      "name": "악마"
+//    },
+//    {
+//      "slug": "mech",
+//      "id": 17,
+//      "name": "기계"
+//    },

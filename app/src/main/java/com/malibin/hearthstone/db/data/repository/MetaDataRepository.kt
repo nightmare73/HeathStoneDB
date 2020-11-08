@@ -44,6 +44,21 @@ class MetaDataRepository @Inject constructor(
         cachedCardBackCategories.addAll(metaDataResponse.getCardBackCategories())
     }
 
+    suspend fun getFilterMetaDataOf(
+        filterType: MetaData.FilterType,
+        accessToken: String
+    ): List<MetaData> {
+        return when (filterType) {
+            MetaData.FilterType.CARD_TYPE -> getCardTypes(accessToken)
+            MetaData.FilterType.CARD_SET -> getCardSets(accessToken)
+            MetaData.FilterType.RARITY -> getCardRarities(accessToken)
+            MetaData.FilterType.CLASS -> getCardClasses(accessToken)
+            MetaData.FilterType.MINION_TYPE -> getMinionTypes(accessToken)
+            MetaData.FilterType.KEYWORD -> getCardKeywords(accessToken)
+            MetaData.FilterType.COST -> emptyList()
+        }
+    }
+
     @Synchronized
     suspend fun getCardSets(accessToken: String): List<CardSet> {
         if (cachedCardSets.isEmpty()) {

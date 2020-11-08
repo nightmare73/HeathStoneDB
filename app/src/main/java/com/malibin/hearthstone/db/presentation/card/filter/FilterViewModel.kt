@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.malibin.hearthstone.db.data.entity.metadata.MetaData
 import com.malibin.hearthstone.db.data.entity.metadata.MetaData.FilterType
-import com.malibin.hearthstone.db.data.entity.metadata.MetaData.FilterType.*
 import com.malibin.hearthstone.db.data.repository.BlizzardAuthRepository
 import com.malibin.hearthstone.db.data.repository.MetaDataRepository
 import kotlinx.coroutines.launch
@@ -22,21 +21,23 @@ class FilterViewModel @Inject constructor(
     private val blizzardAuthRepository: BlizzardAuthRepository,
 ) : ViewModel() {
 
+    private val _currentSelectedFilterType = MutableLiveData<FilterType>()
+    val currentSelectedFilterType: LiveData<FilterType>
+        get() = _currentSelectedFilterType
+
     private val _filterDetails = MutableLiveData<List<MetaData>>()
     val filterDetails: LiveData<List<MetaData>>
         get() = _filterDetails
 
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
     fun loadFilterDetailsOf(filterType: FilterType) = viewModelScope.launch {
+        _isLoading.value = true
+        _currentSelectedFilterType.value = filterType
         val token = blizzardAuthRepository.getAccessToken()
-        when (filterType) {
-            CARD_TYPE -> _filterDetails.value = metadataRepository.getCardTypes(token)
-            CARD_SET -> _filterDetails.value = metadataRepository.getCardSets(token)
-            RARITY -> _filterDetails.value = metadataRepository.getCardRarities(token)
-            CLASS -> _filterDetails.value = metadataRepository.getCardClasses(token)
-            MINION_TYPE -> _filterDetails.value = metadataRepository.getMinionTypes(token)
-            KEYWORD -> _filterDetails.value = metadataRepository.getCardKeywords(token)
-            COST -> {
-            }
-        }
+        _filterDetails.value = metadataRepository.getFilterMetaDataOf(filterType, token)
+        _isLoading.value = false
     }
 }

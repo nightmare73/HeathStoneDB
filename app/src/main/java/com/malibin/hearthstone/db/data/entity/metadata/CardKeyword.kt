@@ -15,8 +15,22 @@ data class CardKeyword(
     override val id: Int,
     override val slug: String,
     override val name: String,
-    override val filterType: MetaData.FilterType = MetaData.FilterType.KEYWORD,
     val text: String,
     @SerializedName("refText")
     val detailText: String,
-) : MetaData, Filterable
+) : MetaData
+
+//    {
+//      "id": 2,
+//      "slug": "spellpower",
+//      "name": "주문 공격력",
+//      "refText": "주문 카드가 추가 피해를 줍니다.",
+//      "text": "주문 카드가 의 추가 피해를 줍니다."
+//    },
+//    {
+//      "id": 3,
+//      "slug": "divine-shield",
+//      "name": "천상의 보호막",
+//      "refText": "보호막이 있는 하수인은 피해를 한 번 무시합니다.",
+//      "text": "이 하수인은 피해를 한 번 무시합니다."
+//    },
