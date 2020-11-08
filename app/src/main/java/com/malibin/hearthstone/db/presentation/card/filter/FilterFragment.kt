@@ -4,20 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.malibin.hearthstone.db.data.entity.metadata.MetaData
-import com.malibin.hearthstone.db.data.repository.MetaDataRepository
 import com.malibin.hearthstone.db.databinding.FragmentFilterBinding
-import com.malibin.hearthstone.db.presentation.utils.printLog
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 /**
  * Created By Malibin
@@ -28,6 +21,7 @@ import javax.inject.Inject
 class FilterFragment : Fragment() {
 
     private val filterViewModel: FilterViewModel by viewModels()
+    private var filterChipGroup: FilterChipGroup? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +31,7 @@ class FilterFragment : Fragment() {
         val binding = FragmentFilterBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = requireActivity()
         initFilterList(binding)
+        initFilterDetails(binding)
         return binding.root
     }
 
@@ -53,4 +48,25 @@ class FilterFragment : Fragment() {
     private fun onFilterTypeClick(filterType: MetaData.FilterType) {
         filterViewModel.loadFilterDetailsOf(filterType)
     }
+
+    private fun initFilterDetails(binding: FragmentFilterBinding) {
+        filterChipGroup = FilterChipGroup(binding.cgFilterDetails)
+        requireFilterChipGroup().setOnClickListener { view, filterType, filterDetail ->
+            view.isSelected = !view.isSelected
+        }
+        filterViewModel.filterDetails.observe(viewLifecycleOwner) {
+            val filterType = filterViewModel.currentSelectedFilterType.value ?: return@observe
+            requireFilterChipGroup().refresh(filterType, it)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        requireFilterChipGroup().destroy()
+        filterChipGroup = null
+    }
+
+    private fun requireFilterChipGroup() = filterChipGroup
+        ?: throw IllegalStateException("FilterChipGroup is not attached to Fragment")
 }
