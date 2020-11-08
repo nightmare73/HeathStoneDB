@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,8 +27,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FilterFragment : Fragment() {
 
-    @Inject
-    lateinit var filterViewModel: FilterViewModel
+    private val filterViewModel: FilterViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,18 +43,14 @@ class FilterFragment : Fragment() {
     private fun initFilterList(binding: FragmentFilterBinding) {
         val dividerDecoration =
             DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
-        val filterAdapter = FilterAdapter()
+        val filterAdapter =
+            FilterAdapter(filterViewModel.currentSelectedFilterType, viewLifecycleOwner)
         filterAdapter.setOnFilterTypeClickListener { onFilterTypeClick(it) }
         binding.rvFilterItems.addItemDecoration(dividerDecoration)
         binding.rvFilterItems.adapter = filterAdapter
-
-        filterViewModel.filterDetails.observe(viewLifecycleOwner) {
-            printLog(it.toString())
-        }
     }
 
     private fun onFilterTypeClick(filterType: MetaData.FilterType) {
-        Toast.makeText(requireContext(), "$filterType", Toast.LENGTH_SHORT).show()
         filterViewModel.loadFilterDetailsOf(filterType)
     }
 }
