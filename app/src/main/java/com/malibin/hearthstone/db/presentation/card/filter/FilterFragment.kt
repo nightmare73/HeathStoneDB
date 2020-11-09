@@ -30,6 +30,7 @@ class FilterFragment : Fragment() {
     ): View? {
         val binding = FragmentFilterBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = requireActivity()
+        binding.viewModel = filterViewModel
         initFilterList(binding)
         initFilterDetails(binding)
         return binding.root
@@ -51,13 +52,19 @@ class FilterFragment : Fragment() {
 
     private fun initFilterDetails(binding: FragmentFilterBinding) {
         filterChipGroup = FilterChipGroup(binding.cgFilterDetails)
-        requireFilterChipGroup().setOnClickListener { view, filterType, filterDetail ->
+        requireFilterChipGroup().setOnClickListener { view, filterDetail ->
             view.isSelected = !view.isSelected
+            filterViewModel.applyFilterType(filterDetail)
         }
         filterViewModel.filterDetails.observe(viewLifecycleOwner) {
             val filterType = filterViewModel.currentSelectedFilterType.value ?: return@observe
             requireFilterChipGroup().refresh(filterType, it)
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onFilterTypeClick(MetaData.FilterType.CARD_TYPE)
     }
 
     override fun onDestroyView() {

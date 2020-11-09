@@ -5,10 +5,6 @@
     <data>
 
         <variable
-            name="filterType"
-            type="com.malibin.hearthstone.db.data.entity.metadata.MetaData.FilterType" />
-
-        <variable
             name="filterDetail"
             type="com.malibin.hearthstone.db.data.entity.metadata.MetaData" />
 
@@ -20,7 +16,7 @@
     <com.google.android.material.chip.Chip
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="@{(view) -> clickListener.onChipClick(view, filterType, filterDetail)}"
+        android:onClick="@{(view) -> clickListener.onChipClick(view, filterDetail)}"
         android:text="@{filterDetail.name}"
         app:chipMinTouchTargetSize="2dp" />
 </layout>

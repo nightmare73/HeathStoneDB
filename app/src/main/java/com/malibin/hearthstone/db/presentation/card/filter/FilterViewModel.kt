@@ -9,7 +9,9 @@ import com.malibin.hearthstone.db.data.entity.metadata.MetaData
 import com.malibin.hearthstone.db.data.entity.metadata.MetaData.FilterType
 import com.malibin.hearthstone.db.data.repository.BlizzardAuthRepository
 import com.malibin.hearthstone.db.data.repository.MetaDataRepository
+import com.malibin.hearthstone.db.presentation.utils.printLog
 import kotlinx.coroutines.launch
+import java.util.EnumMap
 
 /**
  * Created By Malibin
@@ -33,6 +35,8 @@ class FilterViewModel @ViewModelInject constructor(
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
+    private val selectedDetails = EnumMap<FilterType, MutableList<MetaData>>(FilterType::class.java)
+
     fun loadFilterDetailsOf(filterType: FilterType) = viewModelScope.launch {
         _isLoading.value = true
         _currentSelectedFilterType.value = filterType
@@ -40,4 +44,18 @@ class FilterViewModel @ViewModelInject constructor(
         _filterDetails.value = metadataRepository.getFilterMetaDataOf(filterType, token)
         _isLoading.value = false
     }
+
+    fun applyFilterType(filterDetail: MetaData) {
+        val filterType = getCurrentFilterType()
+        if (selectedDetails[filterType] == null) {
+            selectedDetails[filterType] = mutableListOf()
+        }
+        val selectedDetails = selectedDetails[filterType] ?: throw IllegalStateException()
+        if (selectedDetails.contains(filterDetail)) selectedDetails.remove(filterDetail)
+        else selectedDetails.add(filterDetail)
+        printLog(this.selectedDetails.toString())
+    }
+
+    private fun getCurrentFilterType() = _currentSelectedFilterType.value
+        ?: throw IllegalStateException("currentSelectedFilterType.value cannot be null")
 }

@@ -21,23 +21,21 @@ class FilterChipGroup(
 
     fun refresh(filterType: MetaData.FilterType, filterDetails: List<MetaData>) {
         if (chips[filterType] == null) {
-            chips[filterType] = createFilterDetailChips(filterType, filterDetails)
+            chips[filterType] = createFilterDetailChips(filterDetails)
         }
         chipGroup.removeAllViews()
         chips[filterType]?.forEach { chipGroup.addView(it) }
     }
 
     private fun createFilterDetailChips(
-        filterType: MetaData.FilterType,
         filterDetails: List<MetaData>
     ): List<Chip> {
-        return filterDetails.map { createChip(filterType, it) }
+        return filterDetails.map { createChip(it) }
     }
 
-    private fun createChip(filterType: MetaData.FilterType, filterDetail: MetaData): Chip {
+    private fun createChip(filterDetail: MetaData): Chip {
         val layoutInflater = LayoutInflater.from(chipGroup.context)
         val binding = ChipFilterBinding.inflate(layoutInflater, null, false)
-        binding.filterType = filterType
         binding.filterDetail = filterDetail
         binding.clickListener = filterChipClickListener
         return binding.root as Chip
@@ -54,6 +52,6 @@ class FilterChipGroup(
     }
 
     fun interface FilterChipClickListener {
-        fun onChipClick(view: View, filterType: MetaData.FilterType, filterDetail: MetaData)
+        fun onChipClick(view: View, filterDetail: MetaData)
     }
 }
