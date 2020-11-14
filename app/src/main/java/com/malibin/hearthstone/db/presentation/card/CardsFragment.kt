@@ -5,15 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
-import com.malibin.hearthstone.db.data.entity.Card
-import com.malibin.hearthstone.db.data.repository.CardsRepository
+import androidx.fragment.app.viewModels
 import com.malibin.hearthstone.db.databinding.FragmentCardsBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * Created By Malibin
@@ -22,13 +16,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CardsFragment : Fragment() {
-
-    private val cardsAdapter = CardsAdapter()
-
-    @Inject
-    lateinit var repository: CardsRepository
-
-    private val liveData = MutableLiveData<List<Card>>(emptyList())
+    private val cardsViewModel: CardsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,20 +24,18 @@ class CardsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentCardsBinding.inflate(inflater, container, false)
-        binding.rvCards.adapter = cardsAdapter
         binding.lifecycleOwner = this
+        binding.viewmodel = cardsViewModel
+        initCardList(binding)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        CoroutineScope(Dispatchers.IO).launch {
-            liveData.postValue(repository.getAllCards(""))
-        }
-
-        liveData.observe(viewLifecycleOwner) {
+    private fun initCardList(binding: FragmentCardsBinding) {
+        val cardsAdapter = CardsAdapter()
+        binding.rvCards.adapter = cardsAdapter
+        cardsViewModel.cards.observe(viewLifecycleOwner) {
             cardsAdapter.submitList(it)
         }
+        cardsViewModel.loadCards() // test
     }
 }
