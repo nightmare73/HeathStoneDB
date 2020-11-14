@@ -9,9 +9,7 @@ import com.malibin.hearthstone.db.data.entity.metadata.MetaData
 import com.malibin.hearthstone.db.data.entity.metadata.MetaData.FilterType
 import com.malibin.hearthstone.db.data.repository.BlizzardAuthRepository
 import com.malibin.hearthstone.db.data.repository.MetaDataRepository
-import com.malibin.hearthstone.db.presentation.utils.printLog
 import kotlinx.coroutines.launch
-import java.util.EnumMap
 
 /**
  * Created By Malibin
@@ -35,7 +33,9 @@ class FilterViewModel @ViewModelInject constructor(
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
-    private val selectedDetails = EnumMap<FilterType, MutableList<MetaData>>(FilterType::class.java)
+    private val _selectedDetails = MutableLiveData(SelectedFilterTypes())
+    val selectedDetails: LiveData<SelectedFilterTypes>
+        get() = _selectedDetails
 
     fun loadFilterDetailsOf(filterType: FilterType) = viewModelScope.launch {
         _isLoading.value = true
@@ -46,16 +46,14 @@ class FilterViewModel @ViewModelInject constructor(
     }
 
     fun applyFilterType(filterDetail: MetaData) {
-        val filterType = getCurrentFilterType()
-        if (selectedDetails[filterType] == null) {
-            selectedDetails[filterType] = mutableListOf()
-        }
-        val selectedDetails = selectedDetails[filterType] ?: throw IllegalStateException()
-        if (selectedDetails.contains(filterDetail)) selectedDetails.remove(filterDetail)
-        else selectedDetails.add(filterDetail)
-        printLog(this.selectedDetails.toString())
+        val selectedDetails = getSelectedDetails()
+        selectedDetails.apply(getCurrentFilterType(), filterDetail)
+        this._selectedDetails.value = selectedDetails
     }
 
-    private fun getCurrentFilterType() = _currentSelectedFilterType.value
+    private fun getSelectedDetails() = _selectedDetails.value
+        ?: throw IllegalStateException("selectedDetails.value cannot be null")
+
+    fun getCurrentFilterType() = _currentSelectedFilterType.value
         ?: throw IllegalStateException("currentSelectedFilterType.value cannot be null")
 }

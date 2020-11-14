@@ -1,6 +1,7 @@
 package com.malibin.hearthstone.db.presentation.card.filter
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.malibin.hearthstone.db.data.entity.metadata.MetaData
 import com.malibin.hearthstone.db.databinding.FragmentFilterBinding
+import com.malibin.hearthstone.db.presentation.utils.printLog
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -19,7 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FilterFragment : Fragment() {
-
     private val filterViewModel: FilterViewModel by viewModels()
     private var filterChipGroup: FilterChipGroup? = null
 
@@ -52,14 +53,16 @@ class FilterFragment : Fragment() {
 
     private fun initFilterDetails(binding: FragmentFilterBinding) {
         filterChipGroup = FilterChipGroup(binding.cgFilterDetails)
-        requireFilterChipGroup().setOnClickListener { view, filterDetail ->
-            view.isSelected = !view.isSelected
-            filterViewModel.applyFilterType(filterDetail)
-        }
+        requireFilterChipGroup().setOnClickListener(this::onChipClick)
         filterViewModel.filterDetails.observe(viewLifecycleOwner) {
-            val filterType = filterViewModel.currentSelectedFilterType.value ?: return@observe
+            val filterType = filterViewModel.getCurrentFilterType()
             requireFilterChipGroup().refresh(filterType, it)
         }
+    }
+
+    private fun onChipClick(view: View, filterDetail: MetaData) {
+        view.isSelected = !view.isSelected
+        filterViewModel.applyFilterType(filterDetail)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
