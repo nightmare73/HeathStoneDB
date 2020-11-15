@@ -3,6 +3,7 @@ package com.malibin.hearthstone.db.data.repository
 import com.malibin.hearthstone.db.data.dao.CardsDao
 import com.malibin.hearthstone.db.data.entity.Card
 import com.malibin.hearthstone.db.data.service.BlizzardService
+import com.malibin.hearthstone.db.presentation.card.filter.SelectedFilterTypes
 import com.malibin.hearthstone.db.presentation.utils.printLog
 import javax.inject.Inject
 
@@ -16,11 +17,14 @@ class CardsRepository @Inject constructor(
     private val cardsDao: CardsDao,
     private val blizzardService: BlizzardService,
 ) {
-    suspend fun getAllCards(accessToken: String): List<Card> {
-        val cards = cardsDao.getAllCards()
+    suspend fun getCards(
+        accessToken: String,
+        selectedFilterTypes: SelectedFilterTypes
+    ): List<Card> {
+        val cards = cardsDao.getCards(selectedFilterTypes.toQuery())
         if (cards.isNotEmpty()) return cards
         loadAllCardsFromRemote(accessToken)
-        return cardsDao.getAllCards()
+        return cardsDao.getCards(selectedFilterTypes.toQuery())
     }
 
     suspend fun loadAllCardsFromRemote(accessToken: String) {

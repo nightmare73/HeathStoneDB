@@ -5,12 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.malibin.hearthstone.db.data.entity.metadata.MetaData
 import com.malibin.hearthstone.db.databinding.FragmentFilterBinding
-import com.malibin.hearthstone.db.presentation.utils.printLog
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -20,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FilterFragment : Fragment() {
-    private val filterViewModel: FilterViewModel by viewModels()
+    private val filterViewModel: FilterViewModel by activityViewModels()
     private var filterChipGroup: FilterChipGroup? = null
 
     override fun onCreateView(

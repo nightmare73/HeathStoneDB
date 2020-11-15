@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.malibin.hearthstone.db.databinding.FragmentCardsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CardsFragment : Fragment() {
-    private val cardsViewModel: CardsViewModel by viewModels()
+    private val cardsViewModel: CardsViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +36,5 @@ class CardsFragment : Fragment() {
         cardsViewModel.cards.observe(viewLifecycleOwner) {
             cardsAdapter.submitList(it)
         }
-        cardsViewModel.loadCards() // test
     }
 }

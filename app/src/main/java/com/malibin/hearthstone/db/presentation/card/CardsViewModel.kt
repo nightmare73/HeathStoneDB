@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.malibin.hearthstone.db.data.entity.Card
 import com.malibin.hearthstone.db.data.repository.BlizzardAuthRepository
 import com.malibin.hearthstone.db.data.repository.CardsRepository
+import com.malibin.hearthstone.db.presentation.card.filter.SelectedFilterTypes
 import kotlinx.coroutines.launch
 
 /**
@@ -28,9 +29,11 @@ class CardsViewModel @ViewModelInject constructor(
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
-    fun loadCards() = viewModelScope.launch {
+    fun loadCards(selectedFilterTypes: SelectedFilterTypes) = viewModelScope.launch {
+        _isLoading.value = true
         val accessToken = blizzardAuthRepository.getAccessToken()
-        val cards = cardsRepository.getAllCards(accessToken)
+        val cards = cardsRepository.getCards(accessToken, selectedFilterTypes)
         _cards.value = cards
+        _isLoading.value = false
     }
 }

@@ -35,19 +35,27 @@ class SelectedFilterTypes(
     }
 
     fun toQuery(): SupportSQLiteQuery {
-        val stringBuilder = StringBuilder("SELECT * FROM Card ")
+        if (this.isEmpty()) return SimpleSQLiteQuery("$SELECT_ALL_CARDS$ORDER_BY")
+        val stringBuilder = StringBuilder(SELECT_ALL_CARDS).append("WHERE ")
         val filterQueries = values.asSequence()
             .filter { it.value.isNotEmpty() }
             .joinToString(" AND ") { filterQueryOf(it) }
         stringBuilder.append(filterQueries)
+        stringBuilder.append(ORDER_BY)
         return SimpleSQLiteQuery(stringBuilder.toString())
     }
 
     private fun filterQueryOf(entry: Map.Entry<FilterType, List<MetaData>>): String {
-        return "WHERE ${entry.key.queryKey} IN(${entry.value.toCommaSeparateIds()})"
+        return "${entry.key.queryKey} IN(${entry.value.toCommaSeparateIds()})"
     }
 
     private fun List<MetaData>.toCommaSeparateIds(): String {
         return this.joinToString(",") { it.id.toString() }
+    }
+
+    companion object {
+        private const val SELECT_ALL_CARDS = "SELECT * FROM Card "
+        private const val ORDER_BY = "ORDER BY manaCost, name"
+        private const val BASIC_HERO = 17
     }
 }

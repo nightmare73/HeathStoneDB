@@ -18,9 +18,6 @@ interface CardsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCards(cards: List<Card>)
 
-    @Query("SELECT * FROM card WHERE cardSetId != $BASIC_HERO ORDER BY manaCost")
-    suspend fun getAllCards(): List<Card>
-
     @RawQuery
     suspend fun getCards(query: SupportSQLiteQuery): List<Card>
 
@@ -29,8 +26,4 @@ interface CardsDao {
 
     @Query("DELETE FROM card")
     suspend fun deleteAllCards()
-
-    companion object {
-        private const val BASIC_HERO = 17
-    }
 }
