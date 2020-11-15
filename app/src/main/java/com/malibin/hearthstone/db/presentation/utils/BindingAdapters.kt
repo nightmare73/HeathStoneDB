@@ -2,7 +2,7 @@ package com.malibin.hearthstone.db.presentation.utils
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.bumptech.glide.Glide
+import com.malibin.hearthstone.db.config.GlideApp
 
 /**
  * Created By Malibin
@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 
 @BindingAdapter("imageUrl")
 fun bindingImageUrl(view: ImageView, imageUrl: String?) {
-    Glide.with(view)
+    GlideApp.with(view)
         .load(imageUrl)
 //        .placeholder(R.drawable.loading)
         .into(view)
