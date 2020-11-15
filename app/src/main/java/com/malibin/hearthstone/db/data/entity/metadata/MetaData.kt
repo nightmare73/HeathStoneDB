@@ -9,13 +9,13 @@ interface MetaData {
     val slug: String
     val name: String
 
-    enum class FilterType(val value: String) {
-        CARD_TYPE("카드 종류"),
-        CARD_SET("확장팩"),
-        RARITY("카드 등급"),
-        CLASS("직업"),
-        MINION_TYPE("종족"),
-        KEYWORD("키워드 효과"),
-        COST("카드 비용");
+    enum class FilterType(val value: String, val queryKey: String) {
+        CARD_TYPE("카드 종류", "cardTypeId"),
+        CARD_SET("확장팩", "cardSetId"),
+        RARITY("카드 등급", "rarityId"),
+        CLASS("직업", "classId"),
+        MINION_TYPE("종족", "minionTypeId"),
+        KEYWORD("키워드 효과", "keywordIds"),
+        COST("카드 비용", "manaCost");
     }
 }

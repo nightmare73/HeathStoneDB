@@ -1,9 +1,7 @@
 package com.malibin.hearthstone.db.data.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.malibin.hearthstone.db.data.entity.Card
 
 /**
@@ -20,12 +18,19 @@ interface CardsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCards(cards: List<Card>)
 
-    @Query("SELECT * FROM card")
+    @Query("SELECT * FROM card WHERE cardSetId != $BASIC_HERO ORDER BY manaCost")
     suspend fun getAllCards(): List<Card>
+
+    @RawQuery
+    suspend fun getCards(query: SupportSQLiteQuery): List<Card>
 
     @Query("SELECT * FROM card WHERE id = :id")
     suspend fun fetchCard(id: Int): Card?
 
     @Query("DELETE FROM card")
     suspend fun deleteAllCards()
+
+    companion object {
+        private const val BASIC_HERO = 17
+    }
 }

@@ -1,5 +1,7 @@
 package com.malibin.hearthstone.db.presentation.card.filter
 
+import androidx.sqlite.db.SimpleSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.malibin.hearthstone.db.data.entity.metadata.MetaData
 import com.malibin.hearthstone.db.data.entity.metadata.MetaData.FilterType
 import java.util.*
@@ -26,5 +28,26 @@ class SelectedFilterTypes(
         val selectedDetails = values[filterType] ?: throw IllegalStateException()
         if (selectedDetails.contains(filterDetail)) selectedDetails.remove(filterDetail)
         else selectedDetails.add(filterDetail)
+    }
+
+    fun isEmpty(): Boolean {
+        return values.all { it.value.isEmpty() }
+    }
+
+    fun toQuery(): SupportSQLiteQuery {
+        val stringBuilder = StringBuilder("SELECT * FROM Card ")
+        val filterQueries = values.asSequence()
+            .filter { it.value.isNotEmpty() }
+            .joinToString(" AND ") { filterQueryOf(it) }
+        stringBuilder.append(filterQueries)
+        return SimpleSQLiteQuery(stringBuilder.toString())
+    }
+
+    private fun filterQueryOf(entry: Map.Entry<FilterType, List<MetaData>>): String {
+        return "WHERE ${entry.key.queryKey} IN(${entry.value.toCommaSeparateIds()})"
+    }
+
+    private fun List<MetaData>.toCommaSeparateIds(): String {
+        return this.joinToString(",") { it.id.toString() }
     }
 }
