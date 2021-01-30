@@ -1,6 +1,5 @@
 package com.malibin.hearthstone.db.presentation.card
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -15,6 +14,8 @@ import com.malibin.hearthstone.db.databinding.ItemCardBinding
  */
 
 class CardsAdapter : ListAdapter<Card, CardsAdapter.ViewHolder>(DiffCallback()) {
+
+    var onCardClicked: ((Card) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -33,7 +34,7 @@ class CardsAdapter : ListAdapter<Card, CardsAdapter.ViewHolder>(DiffCallback()) 
 
         fun bind(card: Card) {
             binding.card = card
-            binding.imgCard.setOnClickListener { Log.d("MalibinDebug", card.toString()) }
+            binding.imgCard.setOnClickListener { onCardClicked?.invoke(card) }
         }
     }
 
