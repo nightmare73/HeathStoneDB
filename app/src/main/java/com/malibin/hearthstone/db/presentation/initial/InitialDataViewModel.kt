@@ -1,6 +1,5 @@
 package com.malibin.hearthstone.db.presentation.initial
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,14 +7,17 @@ import androidx.lifecycle.viewModelScope
 import com.malibin.hearthstone.db.data.repository.BlizzardAuthRepository
 import com.malibin.hearthstone.db.data.repository.CardsRepository
 import com.malibin.hearthstone.db.data.repository.MetaDataRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Created By Malibin
  * on 10월 26, 2020
  */
 
-class InitialDataViewModel @ViewModelInject constructor(
+@HiltViewModel
+class InitialDataViewModel @Inject constructor(
     private val cardsRepository: CardsRepository,
     private val metaDataRepository: MetaDataRepository,
     private val blizzardAuthRepository: BlizzardAuthRepository,
