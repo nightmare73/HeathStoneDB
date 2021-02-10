@@ -1,4 +1,4 @@
-package com.malibin.hearthstone.db.di
+package com.malibin.hearthstone.db.config.di
 
 import com.malibin.hearthstone.db.data.service.BlizzardOAuthService
 import com.malibin.hearthstone.db.data.service.BlizzardService

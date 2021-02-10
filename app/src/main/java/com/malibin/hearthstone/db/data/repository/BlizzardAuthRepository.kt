@@ -1,9 +1,10 @@
 package com.malibin.hearthstone.db.data.repository
 
-import androidx.datastore.DataStore
-import androidx.datastore.preferences.Preferences
-import androidx.datastore.preferences.edit
-import androidx.datastore.preferences.preferencesKey
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.malibin.hearthstone.db.data.reponse.OAuthResponse
 import com.malibin.hearthstone.db.data.service.BlizzardOAuthService
 import com.malibin.hearthstone.db.presentation.utils.printLog
@@ -50,7 +51,7 @@ class BlizzardAuthRepository @Inject constructor(
     }
 
     companion object {
-        private val KEY_EXPIRE_DATE = preferencesKey<Long>("KEY_EXPIRE_DATE")
-        private val KEY_BLIZZARD_ACCESS_TOKEN = preferencesKey<String>("BLIZZARD_ACCESS_TOKEN")
+        private val KEY_EXPIRE_DATE = longPreferencesKey("KEY_EXPIRE_DATE")
+        private val KEY_BLIZZARD_ACCESS_TOKEN = stringPreferencesKey("BLIZZARD_ACCESS_TOKEN")
     }
 }

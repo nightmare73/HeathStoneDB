@@ -1,4 +1,4 @@
-package com.malibin.hearthstone.db.di
+package com.malibin.hearthstone.db.config.di
 
 import android.content.Context
 import androidx.room.Room
