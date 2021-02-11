@@ -1,15 +1,9 @@
 package com.malibin.hearthstone.db.data.repository
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
-import com.malibin.hearthstone.db.data.reponse.OAuthResponse
-import com.malibin.hearthstone.db.data.service.BlizzardOAuthService
+import com.malibin.hearthstone.db.config.di.annotations.BlizzardAuthLocal
+import com.malibin.hearthstone.db.config.di.annotations.BlizzardAuthRemote
+import com.malibin.hearthstone.db.data.source.BlizzardAuthDataSource
 import com.malibin.hearthstone.db.presentation.utils.printLog
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -18,40 +12,27 @@ import javax.inject.Inject
  */
 
 class BlizzardAuthRepository @Inject constructor(
-    private val blizzardTokenStore: DataStore<Preferences>,
-    private val blizzardOAuthService: BlizzardOAuthService,
-) {
-    // 이건 어떻게 테스트해야하지? 3가지 기능들을. 흠.
-    suspend fun getAccessToken(): String {
-        val localToken = blizzardTokenStore.data.map { it[KEY_BLIZZARD_ACCESS_TOKEN] }.first()
-        return if (localToken == null) {
-            getRemoteAccessToken().also { printLog("localToken not exist") }
-        } else {
-            if (isTokenExpired()) getRemoteAccessToken().also { printLog("localToken expired") }
-            else localToken.also { printLog("localToken loaded") }
+    @BlizzardAuthLocal private val blizzardAuthLocalSource: BlizzardAuthDataSource,
+    @BlizzardAuthRemote private val blizzardAuthRemoteSource: BlizzardAuthDataSource,
+) : BlizzardAuthDataSource {
+
+    override suspend fun getAccessToken(): String? {
+        val localToken = blizzardAuthLocalSource.getAccessToken()
+        if (localToken == null || isTokenExpired(System.currentTimeMillis())) {
+            return blizzardAuthRemoteSource.getAccessToken().also { printLog("remoteToken loaded") }
         }
+        return localToken.also { printLog("localToken loaded") }
     }
 
-    private suspend fun isTokenExpired(): Boolean {
-        val expireDate = blizzardTokenStore.data.map { it[KEY_EXPIRE_DATE] }.first() ?: 0L
-        return expireDate <= System.currentTimeMillis()
+    override suspend fun saveAccessToken(token: String) {
+        blizzardAuthLocalSource.saveAccessToken(token)
     }
 
-    private suspend fun getRemoteAccessToken(): String {
-        val response = blizzardOAuthService.requestOAuthToken()
-        saveAccessToken(response)
-        return response.accessToken
+    override suspend fun isTokenExpired(currentTime: Long): Boolean {
+        return blizzardAuthLocalSource.isTokenExpired(currentTime)
     }
 
-    private suspend fun saveAccessToken(response: OAuthResponse) {
-        blizzardTokenStore.edit {
-            it[KEY_EXPIRE_DATE] = response.getExpireTime()
-            it[KEY_BLIZZARD_ACCESS_TOKEN] = response.accessToken
-        }
-    }
-
-    companion object {
-        private val KEY_EXPIRE_DATE = longPreferencesKey("KEY_EXPIRE_DATE")
-        private val KEY_BLIZZARD_ACCESS_TOKEN = stringPreferencesKey("BLIZZARD_ACCESS_TOKEN")
+    override suspend fun saveTokenExpireTime(time: Long) {
+        blizzardAuthLocalSource.saveTokenExpireTime(time)
     }
 }
