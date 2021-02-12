@@ -17,21 +17,18 @@ class CardsRepository @Inject constructor(
     private val cardsDao: CardsDao,
     private val blizzardService: BlizzardService,
 ) {
-    suspend fun getCards(
-        accessToken: String,
-        selectedFilterTypes: SelectedFilterTypes
-    ): List<Card> {
+    suspend fun getCards(selectedFilterTypes: SelectedFilterTypes): List<Card> {
         val cards = cardsDao.getCards(selectedFilterTypes.toQuery())
         if (cards.isNotEmpty()) return cards
-        loadAllCardsFromRemote(accessToken)
+        loadAllCardsFromRemote()
         return cardsDao.getCards(selectedFilterTypes.toQuery())
     }
 
-    suspend fun loadAllCardsFromRemote(accessToken: String) {
+    suspend fun loadAllCardsFromRemote() {
         deleteAllCards()
-        val firstCardsResponse = blizzardService.getCards(accessToken)
+        val firstCardsResponse = blizzardService.getCards()
         saveCards(firstCardsResponse.toCards())
-        (2..firstCardsResponse.pageCount).forEach { loadCardsPageOf(it, accessToken) }
+        (2..firstCardsResponse.pageCount).forEach { loadCardsPageOf(it) }
     }
 
     suspend fun deleteAllCards() {
@@ -42,8 +39,8 @@ class CardsRepository @Inject constructor(
         cardsDao.insertCards(cards)
     }
 
-    private suspend fun loadCardsPageOf(page: Int, token: String) {
-        val cardsResponse = blizzardService.getCards(accessToken = token, page = page)
+    private suspend fun loadCardsPageOf(page: Int) {
+        val cardsResponse = blizzardService.getCards(page = page)
         saveCards(cardsResponse.toCards())
         printLog("card page of $page loaded")
     }

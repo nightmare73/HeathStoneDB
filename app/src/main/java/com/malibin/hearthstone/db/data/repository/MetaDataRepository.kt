@@ -25,8 +25,8 @@ class MetaDataRepository @Inject constructor(
     private val cachedCardKeywords = mutableListOf<CardKeyword>()
     private val cachedCardBackCategories = mutableListOf<CardBackCategory>()
 
-    suspend fun loadAllMetaDataFromRemote(accessToken: String) {
-        val metaDataResponse = blizzardService.getMetaData(accessToken)
+    suspend fun loadAllMetaDataFromRemote() {
+        val metaDataResponse = blizzardService.getMetaData()
         deleteAllMetaData()
         metaDataDao.insertAllMetaData(metaDataResponse)
         cacheAllMetaData(metaDataResponse)
@@ -44,116 +44,113 @@ class MetaDataRepository @Inject constructor(
         cachedCardBackCategories.addAll(metaDataResponse.getCardBackCategories())
     }
 
-    suspend fun getFilterMetaDataOf(
-        filterType: MetaData.FilterType,
-        accessToken: String
-    ): List<MetaData> {
+    suspend fun getFilterMetaDataOf(filterType: MetaData.FilterType): List<MetaData> {
         return when (filterType) {
-            MetaData.FilterType.CARD_TYPE -> getCardTypes(accessToken)
-            MetaData.FilterType.CARD_SET -> getCardSets(accessToken)
-            MetaData.FilterType.RARITY -> getCardRarities(accessToken)
-            MetaData.FilterType.CLASS -> getCardClasses(accessToken)
-            MetaData.FilterType.MINION_TYPE -> getMinionTypes(accessToken)
-            MetaData.FilterType.KEYWORD -> getCardKeywords(accessToken)
+            MetaData.FilterType.CARD_TYPE -> getCardTypes()
+            MetaData.FilterType.CARD_SET -> getCardSets()
+            MetaData.FilterType.RARITY -> getCardRarities()
+            MetaData.FilterType.CLASS -> getCardClasses()
+            MetaData.FilterType.MINION_TYPE -> getMinionTypes()
+            MetaData.FilterType.KEYWORD -> getCardKeywords()
             MetaData.FilterType.COST -> emptyList()
         }
     }
 
     @Synchronized
-    suspend fun getCardSets(accessToken: String): List<CardSet> {
+    suspend fun getCardSets(): List<CardSet> {
         if (cachedCardSets.isEmpty()) {
             val cardSets = metaDataDao.getCardSets()
             if (cardSets.isNotEmpty()) return cardSets
                 .also { cachedCardSets.addAll(it) }
-            loadAllMetaDataFromRemote(accessToken)
+            loadAllMetaDataFromRemote()
         }
         return cachedCardSets
     }
 
     @Synchronized
-    suspend fun getCardSetGroups(accessToken: String): List<CardSetGroup> {
+    suspend fun getCardSetGroups(): List<CardSetGroup> {
         if (cachedCardSetGroups.isEmpty()) {
             val cardSetGroups = metaDataDao.getCardSetGroups()
             if (cardSetGroups.isNotEmpty()) return cardSetGroups
                 .also { cachedCardSetGroups.addAll(it) }
-            loadAllMetaDataFromRemote(accessToken)
+            loadAllMetaDataFromRemote()
         }
         return cachedCardSetGroups
     }
 
     @Synchronized
-    suspend fun getArenaCardIds(accessToken: String): List<ArenaCardId> {
+    suspend fun getArenaCardIds(): List<ArenaCardId> {
         if (cachedArenaCardIds.isEmpty()) {
             val cardArenaCardIds = metaDataDao.getCardArenaCardIds()
             if (cardArenaCardIds.isNotEmpty()) return cardArenaCardIds
                 .also { cachedArenaCardIds.addAll(it) }
-            loadAllMetaDataFromRemote(accessToken)
+            loadAllMetaDataFromRemote()
         }
         return cachedArenaCardIds
     }
 
     @Synchronized
-    suspend fun getCardTypes(accessToken: String): List<CardType> {
+    suspend fun getCardTypes(): List<CardType> {
         if (cachedCardTypes.isEmpty()) {
             val cardTypes = metaDataDao.getCardTypes()
             if (cardTypes.isNotEmpty()) return cardTypes
                 .also { cachedCardTypes.addAll(it) }
-            loadAllMetaDataFromRemote(accessToken)
+            loadAllMetaDataFromRemote()
         }
         return cachedCardTypes
     }
 
     @Synchronized
-    suspend fun getCardRarities(accessToken: String): List<CardRarity> {
+    suspend fun getCardRarities(): List<CardRarity> {
         if (cachedCardRarities.isEmpty()) {
             val cardRarities = metaDataDao.getCardRarities()
             if (cardRarities.isNotEmpty()) return cardRarities
                 .also { cachedCardRarities.addAll(it) }
-            loadAllMetaDataFromRemote(accessToken)
+            loadAllMetaDataFromRemote()
         }
         return cachedCardRarities
     }
 
     @Synchronized
-    suspend fun getCardClasses(accessToken: String): List<CardClass> {
+    suspend fun getCardClasses(): List<CardClass> {
         if (cachedCardClasses.isEmpty()) {
             val cardClasses = metaDataDao.getCardClasses()
             if (cardClasses.isNotEmpty()) return cardClasses
                 .also { cachedCardClasses.addAll(it) }
-            loadAllMetaDataFromRemote(accessToken)
+            loadAllMetaDataFromRemote()
         }
         return cachedCardClasses
     }
 
     @Synchronized
-    suspend fun getMinionTypes(accessToken: String): List<MinionType> {
+    suspend fun getMinionTypes(): List<MinionType> {
         if (cachedMinionTypes.isEmpty()) {
             val minionTypes = metaDataDao.getMinionTypes()
             if (minionTypes.isNotEmpty()) return minionTypes
                 .also { cachedMinionTypes.addAll(it) }
-            loadAllMetaDataFromRemote(accessToken)
+            loadAllMetaDataFromRemote()
         }
         return cachedMinionTypes
     }
 
     @Synchronized
-    suspend fun getCardKeywords(accessToken: String): List<CardKeyword> {
+    suspend fun getCardKeywords(): List<CardKeyword> {
         if (cachedCardKeywords.isEmpty()) {
             val cardKeywords = metaDataDao.getCardKeywords()
             if (cardKeywords.isNotEmpty()) return cardKeywords
                 .also { cachedCardKeywords.addAll(it) }
-            loadAllMetaDataFromRemote(accessToken)
+            loadAllMetaDataFromRemote()
         }
         return cachedCardKeywords
     }
 
     @Synchronized
-    suspend fun getCardBackCategories(accessToken: String): List<CardBackCategory> {
+    suspend fun getCardBackCategories(): List<CardBackCategory> {
         if (cachedCardBackCategories.isEmpty()) {
             val cardBackCategories = metaDataDao.getCardBackCategories()
             if (cardBackCategories.isNotEmpty()) return cardBackCategories
                 .also { cachedCardBackCategories.addAll(it) }
-            loadAllMetaDataFromRemote(accessToken)
+            loadAllMetaDataFromRemote()
         }
         return cachedCardBackCategories
     }

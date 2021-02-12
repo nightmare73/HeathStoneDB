@@ -8,7 +8,10 @@ import com.malibin.hearthstone.db.data.service.BlizzardOAuthService
 import com.malibin.hearthstone.db.data.source.BlizzardAuthDataSource
 import com.malibin.hearthstone.db.data.source.local.BlizzardAuthLocalSource
 import com.malibin.hearthstone.db.data.source.remote.BlizzardAuthRemoteSource
+import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 /**
@@ -16,6 +19,8 @@ import javax.inject.Singleton
  * on 2월 11, 2021
  */
 
+@Module
+@InstallIn(SingletonComponent::class)
 object DataSourceModule {
 
     @BlizzardAuthLocal

@@ -15,7 +15,6 @@ interface BlizzardService {
 
     @GET("/hearthstone/cards")
     suspend fun getCards(
-        @Query("access_token") accessToken: String,
         @Query("page") page: Int = 1,
         @Query("gameMode") gamaMode: String = "constructed",
         @Query("region") region: String = "kr",
@@ -24,7 +23,6 @@ interface BlizzardService {
 
     @GET("/hearthstone/cards/{idorslug}")
     suspend fun fetchCard(
-        @Query("access_token") accessToken: String,
         @Query("idorslug") idOrSlug: String,
         @Query("gameMode") gamaMode: String = "constructed",
         @Query("region") region: String = "kr",
@@ -33,7 +31,6 @@ interface BlizzardService {
 
     @GET("/hearthstone/metadata")
     suspend fun getMetaData(
-        @Query("access_token") accessToken: String,
         @Query("region") region: String = "kr",
         @Query("locale") locale: String = "ko_KR",
     ): MetaDataResponse

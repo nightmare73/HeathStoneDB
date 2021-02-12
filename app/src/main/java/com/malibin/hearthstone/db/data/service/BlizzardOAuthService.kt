@@ -3,8 +3,9 @@ package com.malibin.hearthstone.db.data.service
 import android.util.Base64
 import com.malibin.hearthstone.db.BuildConfig
 import com.malibin.hearthstone.db.data.reponse.OAuthResponse
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -20,7 +21,7 @@ interface BlizzardOAuthService {
     @POST("oauth/token")
     suspend fun requestOAuthToken(
         @Header("Authorization") auth: String = getEncodedCredential(),
-        @Part("grant_type") grant_type: RequestBody = getGrantType(),
+        @Part("grant_type") grantType: RequestBody = getGrantType(),
     ): OAuthResponse
 
     private fun getEncodedCredential(): String {
@@ -31,8 +32,8 @@ interface BlizzardOAuthService {
     }
 
     private fun getGrantType(): RequestBody {
-        val textMediaType = MediaType.parse("text/plain")
-        return RequestBody.create(textMediaType, "client_credentials")
+        val textMediaType = "text/plain".toMediaType()
+        return "client_credentials".toRequestBody(textMediaType)
     }
 
     companion object {

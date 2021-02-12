@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.malibin.hearthstone.db.data.repository.BlizzardAuthRepository
 import com.malibin.hearthstone.db.data.repository.CardsRepository
 import com.malibin.hearthstone.db.data.repository.MetaDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +19,6 @@ import javax.inject.Inject
 class InitialDataViewModel @Inject constructor(
     private val cardsRepository: CardsRepository,
     private val metaDataRepository: MetaDataRepository,
-    private val blizzardAuthRepository: BlizzardAuthRepository,
 ) : ViewModel() {
 
     private val _isMetaDataLoadFinished = MutableLiveData(false)
@@ -32,20 +30,19 @@ class InitialDataViewModel @Inject constructor(
         get() = _isCardsLoadFinished
 
     fun load() = viewModelScope.launch {
-        val blizzardAccessToken = blizzardAuthRepository.getAccessToken()
-        loadMetaData(blizzardAccessToken)
-        loadCards(blizzardAccessToken)
+        loadMetaData()
+        loadCards()
     }
 
-    private suspend fun loadMetaData(accessToken: String) {
+    private suspend fun loadMetaData() {
         _isMetaDataLoadFinished.value = false
-        metaDataRepository.loadAllMetaDataFromRemote(accessToken)
+        metaDataRepository.loadAllMetaDataFromRemote()
         _isMetaDataLoadFinished.value = true
     }
 
-    private suspend fun loadCards(accessToken: String) {
+    private suspend fun loadCards() {
         _isCardsLoadFinished.value = false
-        cardsRepository.loadAllCardsFromRemote(accessToken)
+        cardsRepository.loadAllCardsFromRemote()
         _isCardsLoadFinished.value = true
     }
 

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.malibin.hearthstone.db.data.entity.metadata.MetaData
 import com.malibin.hearthstone.db.data.entity.metadata.MetaData.FilterType
-import com.malibin.hearthstone.db.data.repository.BlizzardAuthRepository
 import com.malibin.hearthstone.db.data.repository.MetaDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class FilterViewModel @Inject constructor(
     private val metadataRepository: MetaDataRepository,
-    private val blizzardAuthRepository: BlizzardAuthRepository,
 ) : ViewModel() {
 
     private val _currentSelectedFilterType = MutableLiveData<FilterType>()
@@ -42,8 +40,7 @@ class FilterViewModel @Inject constructor(
     fun loadFilterDetailsOf(filterType: FilterType) = viewModelScope.launch {
         _isLoading.value = true
         _currentSelectedFilterType.value = filterType
-        val token = blizzardAuthRepository.getAccessToken()
-        _filterDetails.value = metadataRepository.getFilterMetaDataOf(filterType, token)
+        _filterDetails.value = metadataRepository.getFilterMetaDataOf(filterType)
         _isLoading.value = false
     }
 
