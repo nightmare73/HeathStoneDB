@@ -1,6 +1,7 @@
 package com.malibin.hearthstone.db.config.di
 
 import com.malibin.hearthstone.db.config.interceptor.AddingBlizzardTokenInterceptor
+import com.malibin.hearthstone.db.config.interceptor.SavingTokenInterceptor
 import com.malibin.hearthstone.db.data.service.BlizzardOAuthService
 import com.malibin.hearthstone.db.data.service.BlizzardService
 import com.malibin.hearthstone.db.presentation.utils.printLog
@@ -26,10 +27,15 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    fun provideBlizzardOAuthService(gsonConverterFactory: GsonConverterFactory): BlizzardOAuthService {
+    fun provideBlizzardOAuthService(
+        gsonConverterFactory: GsonConverterFactory,
+        interceptor: SavingTokenInterceptor,
+    ): BlizzardOAuthService {
+        val interceptors = listOf(interceptor)
         return Retrofit.Builder()
             .baseUrl(BlizzardOAuthService.BASE_URL)
             .addConverterFactory(gsonConverterFactory)
+            .client(createOkHttpClient(listOf(), interceptors))
             .build()
             .create(BlizzardOAuthService::class.java)
     }
@@ -40,20 +46,25 @@ object RetrofitModule {
         gsonConverterFactory: GsonConverterFactory,
         interceptor: AddingBlizzardTokenInterceptor,
     ): BlizzardService {
+        val networkInterceptors = listOf(interceptor)
         return Retrofit.Builder()
             .baseUrl(BlizzardService.BASE_URL)
             .addConverterFactory(gsonConverterFactory)
-            .client(createOkHttpClient(interceptor))
+            .client(createOkHttpClient(networkInterceptors))
             .build()
             .create(BlizzardService::class.java)
     }
 
 
-    private fun createOkHttpClient(interceptor: Interceptor): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addNetworkInterceptor(interceptor)
-            .addInterceptor(createHttpLoggingInterceptor())
-            .build()
+    private fun createOkHttpClient(
+        networkInterceptors: List<Interceptor> = listOf(),
+        applicationInterceptors: List<Interceptor> = listOf(),
+    ): OkHttpClient {
+        val okHttpClient = OkHttpClient.Builder()
+        networkInterceptors.forEach { okHttpClient.addNetworkInterceptor(it) }
+        applicationInterceptors.forEach { okHttpClient.addInterceptor(it) }
+        okHttpClient.addInterceptor(createHttpLoggingInterceptor())
+        return okHttpClient.build()
     }
 
     private fun createHttpLoggingInterceptor(): HttpLoggingInterceptor {

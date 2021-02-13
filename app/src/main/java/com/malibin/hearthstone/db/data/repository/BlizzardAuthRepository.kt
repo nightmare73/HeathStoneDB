@@ -19,8 +19,11 @@ class BlizzardAuthRepository @Inject constructor(
     override suspend fun getAccessToken(): String {
         val localToken = blizzardAuthLocalSource.getAccessToken()
         if (localToken == null || isTokenExpired(System.currentTimeMillis())) {
-            return blizzardAuthRemoteSource.getAccessToken().also { printLog("remoteToken loaded") }
+            val remoteAccessToken = blizzardAuthRemoteSource.getAccessToken()
+                .also { printLog("remoteToken loaded") }
                 ?: error("remote access token cannot be null")
+            saveAccessToken(remoteAccessToken)
+            return remoteAccessToken
         }
         return localToken.also { printLog("localToken loaded") }
     }
