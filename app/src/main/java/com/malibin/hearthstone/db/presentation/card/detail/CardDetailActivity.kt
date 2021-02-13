@@ -16,6 +16,7 @@ class CardDetailActivity : AppCompatActivity() {
 
         val binding = ActivityCardDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initView(binding)
 
         cardDetailViewModel.loadCard(getCardId())
     }

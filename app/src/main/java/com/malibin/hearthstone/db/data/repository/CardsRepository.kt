@@ -5,6 +5,8 @@ import com.malibin.hearthstone.db.data.entity.Card
 import com.malibin.hearthstone.db.data.service.BlizzardService
 import com.malibin.hearthstone.db.presentation.card.filter.SelectedFilterTypes
 import com.malibin.hearthstone.db.presentation.utils.printLog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -17,11 +19,17 @@ class CardsRepository @Inject constructor(
     private val cardsDao: CardsDao,
     private val blizzardService: BlizzardService,
 ) {
+    suspend fun getCard(cardId: Int): Card? = withContext(Dispatchers.IO) {
+        return@withContext cardsDao.fetchCard(cardId)
+    }
+
     suspend fun getCards(selectedFilterTypes: SelectedFilterTypes): List<Card> {
-        val cards = cardsDao.getCards(selectedFilterTypes.toQuery())
+        val cards = withContext(Dispatchers.IO) {
+            cardsDao.getCards(selectedFilterTypes.toQuery())
+        }
         if (cards.isNotEmpty()) return cards
         loadAllCardsFromRemote()
-        return cardsDao.getCards(selectedFilterTypes.toQuery())
+        return withContext(Dispatchers.IO) { cardsDao.getCards(selectedFilterTypes.toQuery()) }
     }
 
     suspend fun loadAllCardsFromRemote() {
@@ -31,11 +39,11 @@ class CardsRepository @Inject constructor(
         (2..firstCardsResponse.pageCount).forEach { loadCardsPageOf(it) }
     }
 
-    suspend fun deleteAllCards() {
+    suspend fun deleteAllCards() = withContext(Dispatchers.IO) {
         cardsDao.deleteAllCards()
     }
 
-    private suspend fun saveCards(cards: List<Card>) {
+    private suspend fun saveCards(cards: List<Card>) = withContext(Dispatchers.IO) {
         cardsDao.insertCards(cards)
     }
 

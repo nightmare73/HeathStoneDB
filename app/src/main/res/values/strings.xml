@@ -6,4 +6,5 @@
     <string name="metadata_downloading">메타데이터 다운 중....</string>
     <string name="card_downloading">카드 데이터 다운 중....</string>
     <string name="download_complete">데이터 다운 완료!</string>
+    <string name="card_flavor_text">\"%s\"</string>
 </resources>
