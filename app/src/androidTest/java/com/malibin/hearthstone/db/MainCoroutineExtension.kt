@@ -13,8 +13,8 @@ import org.junit.jupiter.api.extension.ExtensionContext
  */
 
 @ExperimentalCoroutinesApi
-class MainCoroutineRule(
-    val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher(),
+class MainCoroutineExtension(
+    private val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher(),
 ) : BeforeEachCallback, AfterEachCallback,
     TestCoroutineScope by TestCoroutineScope(testDispatcher) {
 

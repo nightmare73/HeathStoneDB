@@ -1,18 +1,17 @@
 package com.malibin.hearthstone.db.data.dao
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
+import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.malibin.hearthstone.db.InstantTaskExecutorExtension
-import com.malibin.hearthstone.db.MainCoroutineRule
+import com.malibin.hearthstone.db.MainCoroutineExtension
 import com.malibin.hearthstone.db.data.db.HearthStoneDataBase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Rule
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.RegisterExtension
 
@@ -21,25 +20,20 @@ import org.junit.jupiter.api.extension.RegisterExtension
  * on 2월 18, 2021
  */
 
-@ExtendWith( InstantTaskExecutorExtension::class)
+@ExtendWith(InstantTaskExecutorExtension::class)
 @ExperimentalCoroutinesApi
 class CardsDaoTest {
 
-//    companion object {
-//        @JvmField
-//        @RegisterExtension
-//        val coroutineRule = MainCoroutineRule()
-//    }
-//    @get:Rule
-//    val coroutineRule = MainCoroutineRule()
-//
-//    @get:Rule
-//    val instantExecutorRule = InstantTaskExecutorRule()
+    companion object {
+        @JvmField
+        @RegisterExtension
+        val coroutineExtension = MainCoroutineExtension()
+    }
 
     private lateinit var cardsDao: CardsDao
 
     @BeforeEach
-    fun dao_initialize() {
+    fun dao_초기화() {
         cardsDao = Room.inMemoryDatabaseBuilder(
             InstrumentationRegistry.getInstrumentation().context,
             HearthStoneDataBase::class.java
@@ -49,7 +43,7 @@ class CardsDaoTest {
 
     @Test
     @DisplayName("카드 Id로 카드 한 장 조회가 가능하다")
-    fun 카드Id로_카드_한_장_조회가_가능하다() = runBlockingTest {
+    fun 카드Id로_카드_한_장_조회가_가능하다() = coroutineExtension.runBlockingTest {
         // given
         cardsDao.insertCards(listOf(리로이젠킨스))
         val 리로이젠킨스_카드id = 559
@@ -63,7 +57,7 @@ class CardsDaoTest {
 
     @Test
     @DisplayName("존재하지 않는 카드 id로 조회하면 null을 반환한다.")
-    fun 존재하지_않는_카드_id로_조회하면_null_리턴() = runBlockingTest {
+    fun 존재하지_않는_카드_id로_조회하면_null_리턴() = coroutineExtension.runBlockingTest {
         // given
         cardsDao.insertCards(listOf(리로이젠킨스))
         val 존재하지않는_id = 0
@@ -73,5 +67,26 @@ class CardsDaoTest {
 
         // then
         assertThat(card).isNull()
+    }
+
+    @Test
+    @DisplayName("커스텀 쿼리로 카드를 가져올 수 있다.")
+    fun getCard() = coroutineExtension.runBlockingTest {
+        // given
+        cardsDao.insertCards(listOf(리로이젠킨스))
+        val query = """
+            SELECT * FROM CARD 
+            WHERE manaCost = 5 AND rarityId = 5 AND attack = 6
+        """.trimIndent()
+        val sqlLiteQuery = SimpleSQLiteQuery(query)
+
+        // when
+        val cards = cardsDao.getCards(sqlLiteQuery)
+
+        // then
+        assertAll(
+            { assertThat(cards).hasSize(1) },
+            { assertThat(cards).contains(리로이젠킨스) },
+        )
     }
 }
