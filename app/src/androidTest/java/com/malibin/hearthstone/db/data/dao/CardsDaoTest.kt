@@ -8,6 +8,7 @@ import com.malibin.hearthstone.db.InstantTaskExecutorExtension
 import com.malibin.hearthstone.db.MainCoroutineExtension
 import com.malibin.hearthstone.db.data.db.HearthStoneDataBase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.asExecutor
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -20,7 +21,6 @@ import org.junit.jupiter.api.extension.RegisterExtension
  * on 2월 18, 2021
  */
 
-@ExtendWith(InstantTaskExecutorExtension::class)
 @ExperimentalCoroutinesApi
 class CardsDaoTest {
 
@@ -37,7 +37,9 @@ class CardsDaoTest {
         cardsDao = Room.inMemoryDatabaseBuilder(
             InstrumentationRegistry.getInstrumentation().context,
             HearthStoneDataBase::class.java
-        ).build()
+        ).setTransactionExecutor(coroutineExtension.testDispatcher.asExecutor())
+            .setQueryExecutor(coroutineExtension.testDispatcher.asExecutor())
+            .build()
             .cardsDao()
     }
 
